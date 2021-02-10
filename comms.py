@@ -38,6 +38,9 @@ class Communication:
             datos.append(mensaje[i])
         return datos
 
+    # Manda una instruccion al arduino para que haga algo (en este caso dispensar comida)
+    def doAction(self, action):
+        self.arduino.write(bytes(action))
 
     # Escuchar teclado para prender y apagar el led de arduino 1 = Apagado, 2 = Prendido
     # Utiliza el modulo msvcrt put para escuchar cuando se presiona una tecla del teclado
@@ -45,10 +48,10 @@ class Communication:
         tecla = msvcrt.getch()
         # Evalua si la tecla es q para mandar comando de apagar led
         if(tecla == bytes(tecla1)):
-            self.arduino.write(b'1')
+            self.arduino.write(b'o')
         # Evalua si la tecla es a para mandar comando de prender led
         elif(tecla == bytes(tecla2)):
-            self.arduino.write(b'0')
+            self.arduino.write(b'x')
 
     # Prende o apaga el led dependiendo del parametro state (true o false)
     def setLedState(self, state):
