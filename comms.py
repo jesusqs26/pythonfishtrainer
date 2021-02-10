@@ -9,7 +9,6 @@ class Communication:
         # - Variables -
         # Inputs recibidos del arduino
         self.numInputs = numInputs
-
         self.arduino = serial.Serial(self.findArduino(), 9600)
         
 
@@ -32,7 +31,7 @@ class Communication:
 
 
     # Lee los datos del arduino del puerto serial y los regresa en una lista
-    def escucharSerial(self):
+    def readMessage(self):
         mensaje = self.arduino.readline()[:-2]
         datos = list()
         for i in range(0,self.numInputs):
@@ -42,7 +41,7 @@ class Communication:
 
     # Escuchar teclado para prender y apagar el led de arduino 1 = Apagado, 2 = Prendido
     # Utiliza el modulo msvcrt put para escuchar cuando se presiona una tecla del teclado
-    def escucharTeclado(self, tecla1, tecla2):
+    def sendInstruction(self, tecla1, tecla2): # No se utilizara aun debido a que el led se prendera sin necesidad del teclado al empezar una sesion
         tecla = msvcrt.getch()
         # Evalua si la tecla es q para mandar comando de apagar led
         if(tecla == bytes(tecla1)):
@@ -50,5 +49,15 @@ class Communication:
         # Evalua si la tecla es a para mandar comando de prender led
         elif(tecla == bytes(tecla2)):
             self.arduino.write(b'0')
+
+    # Prende o apaga el led dependiendo del parametro state (true o false)
+    def setLedState(self, state):
+        if state:
+            self.arduino.write(b'1')
+        else:
+            self.arduino.write(b'0')
+
+
+
     
     
