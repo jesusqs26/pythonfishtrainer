@@ -10,6 +10,7 @@ class Communication:
         # Inputs recibidos del arduino
         self.numInputs = numInputs
         self.arduino = serial.Serial(self.findArduino(), 9600)
+        self.arduino.readline()
         
 
     # Detecta el puerto serial en el que se conecto el arduino //aun no valida que solo exista un arduino conectado
@@ -32,10 +33,10 @@ class Communication:
 
     # Lee los datos del arduino del puerto serial y los regresa en una lista
     def readMessage(self):
-        mensaje = self.arduino.readline()[:-2]
-        datos = list()
-        for i in range(0,self.numInputs):
-            datos.append(mensaje[i])
+        mensaje = self.arduino.readline()[:-2].decode("utf-8")
+
+        datos = str(mensaje).split(',')
+        
         return datos
 
     # Manda una instruccion al arduino para que haga algo (en este caso dispensar comida)
