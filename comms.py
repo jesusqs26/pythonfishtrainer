@@ -35,7 +35,7 @@ class Communication:
     def readMessage(self):
         mensaje = self.arduino.readline()[:-2].decode("utf-8")
 
-        datos = str(mensaje).split(',')
+        datos = list(mensaje.encode())
         
         return datos
 
