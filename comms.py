@@ -1,7 +1,11 @@
 # Author: Jesús Ricardo Quintero Serrano
 import serial
-import msvcrt
+# import msvcrt       # No es necesario si no se utiliza el teclado para hacer algo
 import serial.tools.list_ports
+import logging
+import comms
+from datetime import datetime
+import time
 
 # Clase encargada de recibir datos del arduino y mandarle instrucciones
 class Communication:
@@ -33,10 +37,8 @@ class Communication:
 
     # Lee los datos del arduino del puerto serial y los regresa en una lista
     def readMessage(self):
-        mensaje = self.arduino.readline()[:-2].decode("utf-8")
-
-        datos = list(mensaje.encode())
-        
+        mensaje = self.arduino.readline()[:-2]
+        datos = [int(x) for x in str(mensaje.decode("utf-8"))]
         return datos
 
     # Manda una instruccion al arduino para que haga algo (en este caso dispensar comida)
@@ -45,21 +47,21 @@ class Communication:
 
     # Escuchar teclado para prender y apagar el led de arduino 1 = Apagado, 2 = Prendido
     # Utiliza el modulo msvcrt put para escuchar cuando se presiona una tecla del teclado
-    def sendInstruction(self, tecla1, tecla2): # No se utilizara aun debido a que el led se prendera sin necesidad del teclado al empezar una sesion
-        tecla = msvcrt.getch()
-        # Evalua si la tecla es q para mandar comando de apagar led
-        if(tecla == bytes(tecla1)):
-            self.arduino.write(b'o')
+  #  def sendInstruction(self, tecla1, tecla2): # No se utilizara aun debido a que el led se prendera sin necesidad del teclado al empezar una sesion
+   #     tecla = msvcrt.getch()
+    #    # Evalua si la tecla es q para mandar comando de apagar led
+     #   if(tecla == bytes(tecla1)):
+      #      self.arduino.write(b'o')
         # Evalua si la tecla es a para mandar comando de prender led
-        elif(tecla == bytes(tecla2)):
-            self.arduino.write(b'x')
+       # elif(tecla == bytes(tecla2)):
+        #    self.arduino.write(b'x')
 
     # Prende o apaga el led dependiendo del parametro state (true o false)
     def setLedState(self, state):
         if state:
-            self.arduino.write(b'1')
+            self.arduino.write(b'o')
         else:
-            self.arduino.write(b'0')
+            self.arduino.write(b'x')
 
 
 
